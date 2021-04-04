@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--通知栏-->
-    <div class="box">🔔  {{notices}} </div>
+    <div class="box">🔔  {{notice.content}} </div>
 
     <!-- 内容 -->
     <div class="columns">
@@ -12,12 +12,27 @@
 </template>
 
 <script>
+import {getNotices} from '@/api/notices.js'
+
 
 export default {
   name: 'Home',
   data() {
     return {
-      notices: '版本更新',
+      notice: {
+        content: '这是测试阶段'
+      }
+    }
+  },
+  created() {
+    this.fetNotices()
+  },
+  methods: {
+    async fetNotices() {
+      getNotices().then((value) =>{
+        const {data} = value
+        this.notice = data
+      })
     }
   }
 }
