@@ -5,22 +5,30 @@
 
     <!-- 内容 -->
     <div class="columns">
-      <div class="column">区域一</div>
-      <div class="column is-three-quarters">区域二</div>
+      <div class="column">
+        <!-- 侧边栏 -->
+        <left-sidebar/>
+      </div>
+      <div class="column is-three-quarters">
+        <!-- 右侧主体 -->
+        <main-list/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import {getNotices} from '@/api/notices.js'
-
+import {getNotices} from '@/api/notices'
+import LeftSidebar from '@/views/sidebar/LeftSidebar'
+import MainList from '@/views/list/MainList'
 
 export default {
+  components: { LeftSidebar, MainList },
   name: 'Home',
   data() {
     return {
       notice: {
-        content: '这是测试阶段'
+        content: '这是测试阶段、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、留言板'
       }
     }
   },

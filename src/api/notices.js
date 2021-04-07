@@ -5,4 +5,4 @@ export function getNotices() {
     url: '/notices/show',
     method: 'get'
   })
-} 
+}
