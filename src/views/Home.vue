@@ -33,10 +33,10 @@ export default {
     }
   },
   created() {
-    this.fetNotices()
+    this.fetchNotices()
   },
   methods: {
-    async fetNotices() {
+    async fetchNotices() {
       getNotices().then((value) =>{
         const {data} = value
         this.notice = data

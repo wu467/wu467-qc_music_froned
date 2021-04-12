@@ -12,7 +12,7 @@ const service = axios.create({
 })
 
 // 设置cross跨域 并设置访问权限 允许跨域携带cookie信息,使用JWT可关闭
-service.defaults.withCredentials = false
+service.defaults.withCredentials = true
 
 service.interceptors.response.use(
   // 接收到响应数据并成功后的一些共有的处理，关闭loading等
