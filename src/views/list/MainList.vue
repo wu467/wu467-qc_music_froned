@@ -1,7 +1,7 @@
 <template>
   <el-tabs  type="border-card" v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="最新歌曲" name="first"> <new-songs/> </el-tab-pane>
-    <el-tab-pane label="歌单分享" name="second"><song-list-share/></el-tab-pane>
+    <el-tab-pane label="歌单分享" name="second"><play-list-share/></el-tab-pane>
     <el-tab-pane label="我的收藏" name="third">我的收藏</el-tab-pane>
     <el-tab-pane label="搜一搜" name="fourth">搜一搜</el-tab-pane>
   </el-tabs>
@@ -10,7 +10,7 @@
 
 <script>
 import NewSongs from '@/components/PageBody/NewSongs'
-import SongListShare from '@/components/PageBody/SongListShare'
+import PlayListShare from '@/components/PageBody/PlayListShare'
 
   export default {
     data() {
@@ -25,7 +25,7 @@ import SongListShare from '@/components/PageBody/SongListShare'
     },
     components: {
         NewSongs,
-        SongListShare
+        PlayListShare
     }
   };
 </script>

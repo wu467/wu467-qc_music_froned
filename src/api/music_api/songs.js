@@ -1,3 +1,4 @@
+// 获取新歌
 import axios from 'axios'
 
 export function getNewSongs() {
@@ -8,7 +9,7 @@ export function getNewSongs() {
     //     console.log(response.data); // 返回的数据
         
     // })
-    // .catch(error=>{
+    // .catch(error=>{ 
     //     // 请求失败或者then里面代码出现错误时
     //     console.log("http请求失败或者then里面代码报错");
     //     console.log(error);

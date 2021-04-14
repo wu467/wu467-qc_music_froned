@@ -1,6 +1,8 @@
 import axios from 'axios'
 
 export function getPlayMusic(songmid){
+    console.log("调用了播放音乐Api")
+    console.log(songmid)
     return axios.get("/api/song/urls?id="+songmid)
     // .then(response=>{
     //     console.log("http请求成功")

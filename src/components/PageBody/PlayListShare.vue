@@ -3,12 +3,13 @@
   <el-row>
     <el-col :span="6" v-for="(item, index) of list" :key="index" >
       <el-card :body-style="{ padding: '0px' }">
-        <img v-bind:src="item.cover" class="image">
-        
+        <img v-bind:src="item.cover" class="image" @click="intoPlayList(item.content_id)">  <!--点击歌单图片时获取歌单id：content_id-->
       </el-card>
       <div style="padding: 14px;">
           <span>{{item.title}}</span>
-        </div>
+      </div>
+      <!-- 点击歌单图片跳转到子组件 -->
+      <router-link :to="'/ListSongs/'+ item.content_id ">首页</router-link>
     </el-col>
   </el-row>
 </div>
@@ -17,7 +18,8 @@
 
 
 <script>
-import {getSongList} from '@/api/music_api/SongList'
+import {getPlayList} from '@/api/music_api/playList'  //导入获取歌单列表
+import {getPlayListSongs} from '@/api/music_api/playListSongs'  //获取歌单里的歌曲
 
 
 export default ({
@@ -28,17 +30,27 @@ export default ({
       }
     },
     created(){
-        this.fetchSongList()
+        this.fetchPlayList()
       },
       methods: {
-        async fetchSongList(){
-          getSongList().then((response) =>{
+        async fetchPlayList(){
+          getPlayList().then((response) =>{
              const value = response.data  // http响应对象的data属性（json格式）
              this.list = value.data.list 
-             console.log(this.list); // http响应对象          
+             console.log(value.data.list);         
+          })
+        },
+        intoPlayList : function(content_id){
+          const playListId = content_id
+          this.fetchPlayListSongs(playListId)
+        },
+        fetchPlayListSongs(playListId){
+          getPlayListSongs(playListId).then(response => {
+            console.log(response.data)
           })
         }
       },
+
 })
 </script>
 
