@@ -1,15 +1,16 @@
 <template>
 <div>
   <el-row>
-    <el-col :span="6" v-for="(item, index) of list" :key="index" >
-      <el-card :body-style="{ padding: '0px' }">
-        <img v-bind:src="item.cover" class="image" @click="intoPlayList(item.content_id)">  <!--点击歌单图片时获取歌单id：content_id-->
+    <el-col :span="6" v-for="(item, index) of list" :key="index">
+      <el-card :body-style="{ padding: '0px' }" class="card" >
+        <!-- 点击歌单图片跳转到子组件 -->
+        <router-link :to="'/ListSongs/'+ item.content_id ">
+          <img v-bind:src="item.cover" class="image" @click="intoPlayList(item.content_id)">  <!--点击歌单图片时获取歌单id：content_id-->
+          <div class="playListTitle">
+              <span style="">{{item.title}}</span>
+          </div>
+        </router-link>
       </el-card>
-      <div style="padding: 14px;">
-          <span>{{item.title}}</span>
-      </div>
-      <!-- 点击歌单图片跳转到子组件 -->
-      <router-link :to="'/ListSongs/'+ item.content_id ">首页</router-link>
     </el-col>
   </el-row>
 </div>
@@ -56,20 +57,23 @@ export default ({
 
 <style>
 
-  .el-card {
-    min-width: 200x;
+  .card {
     margin-right: 25px;
-    /* transition: all .5s; */
+    margin-top: 20px;
   }
-
-  span {
-    font-size: 10px;
+  .playListTitle {
+    font-size: 12px; 
+    margin-top: 10px;
+    margin-block-end: 5px;
+    text-align: center;
+    color: black;
   }
 
   /* 鼠标悬浮图片变大过渡 */
   img{
     cursor: pointer;
     transition: all 0.6s;
+    /* border-radius: 25px; */
   }
 
   img:hover{
@@ -77,7 +81,7 @@ export default ({
     transform: scale(1.1);
     /* 鼠标悬浮图片变灰和透明 */
     filter:alpha(Opacity=80);
-    -moz-opacity:0.7;
-    opacity: 0.7;
+    -moz-opacity:0.8;
+    opacity: 0.8;
   }
 </style>

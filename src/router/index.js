@@ -13,7 +13,12 @@ const routes = [
     path: '/ListSongs/:content_id',
     name: 'ListSongs',
     component: () => import('@/components/PageBody/BaseListSongs.vue')
-  }
+  },
+  {
+    path: '/SearchListSongs/:keyWord',
+    name: 'SearchListSongs',
+    component: () => import('@/components/PageBody/SearchBaseListSongs.vue')
+  },
 
 ]
 

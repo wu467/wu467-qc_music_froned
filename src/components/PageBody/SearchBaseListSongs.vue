@@ -1,14 +1,12 @@
-<!-- 推荐歌单里的歌曲 -->
+<!-- 最新歌曲 -->
 <template>
   <div>
-    <!-- 不同：组件初始化无值，加载时组件的值就会出现undefine，所以初始化组件时要先给一个值（这里用过滤器赋给tableData为空的值）
-         当加载组件完成后该组件会调用api接口，接口返回的值重新赋值给tabletData
-     -->
-    <el-table :data="(tableData || '').slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%" >
+    <el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%" >
       <el-table-column prop="songname" label="歌曲" width="240"> </el-table-column>
       <el-table-column prop="singer[0].name" label="歌手" width="180"> </el-table-column>
       <el-table-column prop="time" label="时长"></el-table-column>
 
+      <!-- 播放和收藏 -->
       <el-table-column>
         <template slot-scope="scope">
         <el-button icon="el-icon-headset" size="mini" type="success" @click="playSong(scope.$index)">播放</el-button>
@@ -17,13 +15,15 @@
       </el-table-column>
     </el-table>
 
+    <!-- 分页导航条 -->
     <el-pagination align='center' 
       @current-change="handleCurrentChange" 
       :current-page="currentPage"
       :page-size="pageSize"
       layout="total, prev, pager, next"
-      :total="(tableData || '').length">
+      :total="tableData.length">
     </el-pagination>
+
 
   </div>
 
@@ -31,14 +31,14 @@
 
  <script>
 import {getPlayMusic} from '@/api/music_api/playMusic'
-import {getPlayListSongs} from '@/api/music_api/playListSongs'
+import {getSearch} from "@/api/music_api/search"
  
   export default ({
     data() {
       return {
-        tableData: [],  
-        pageSize: 9,  
-        currentPage:1, 
+        tableData: [],  //后端返回的json数据中
+        pageSize: 9,  //每页的数据条数
+        currentPage:1, //默认显示第几页
       }
     },
     created(){
@@ -47,11 +47,11 @@ import {getPlayListSongs} from '@/api/music_api/playListSongs'
     methods: {
       async fetchNewSongs(){
 
-        let content_id = this.$route.params.content_id  //不同，获取playListShare组件调用该组件时传过来的参数 content_id
+        let keyWord = this.$route.params.keyWord  
 
-        getPlayListSongs(content_id).then((response) =>{
-            const value = response.data  
-            this.tableData = value.data.songlist 
+        getSearch(keyWord,this.currentPage).then(response => {
+            console.log(response.data.data.song.list)
+            this.tableData = response.data.data.song.list
         })
       }, 
       handleCurrentChange(val) {
@@ -59,16 +59,18 @@ import {getPlayListSongs} from '@/api/music_api/playListSongs'
         this.currentPage = val;
       },
       playSong : function(index){
-        //不同：NewSongs中api返回的数据中键名为mid的值是歌曲的唯一id，而歌单列表中则是键名songmid
-        const songmid = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)[index].songmid  
-        this.fetchPlay(songmid)                                                                                               
+        const songmid = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)[index].songmid  //获取点击歌曲的 songmid
+        this.fetchPlay(songmid)
       },
       async fetchPlay(songmid){
         getPlayMusic(songmid).then(response=>{
+          console.log(response.data.data[songmid])  // 返回的数据（js对象），通过键songmid获取对应的值
           const url = response.data.data[songmid]
-          window.open(url,'_blank')   
+          window.open(url,'_blank')   //跳转到播放地址页面
+          console.log(url)
         })
-      } 
+      },
+       
     }
   })
 

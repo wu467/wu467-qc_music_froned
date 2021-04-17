@@ -29,7 +29,8 @@ export default {
     return {
       notice: {
         content: '这是测试阶段、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、留言板'
-      }
+      },
+
     }
   },
   created() {
@@ -44,4 +45,10 @@ export default {
     }
   }
 }
+
+
 </script>
+
+<style >
+
+</style>

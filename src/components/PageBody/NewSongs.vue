@@ -9,7 +9,7 @@
       <!-- 播放和收藏 -->
       <el-table-column>
         <template slot-scope="scope">
-        <el-button icon="el-icon-headset" size="mini" type="success" @click="playSong(scope.$index)">播放{{scope.$index}}</el-button>
+        <el-button icon="el-icon-headset" size="mini" type="success" @click="playSong(scope.$index)">播放</el-button>
           <el-button icon="el-icon-star-off" size="mini" type="info" @click="favoriteSong(scope.$index, scope.row)">收藏</el-button>
         </template>
       </el-table-column>
