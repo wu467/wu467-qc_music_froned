@@ -1,15 +1,13 @@
 <template>
-    <el-card class="header">
-          <div slot="header">
-              <span>🥳 每日歌词</span>
-          </div>
-          <div class="has-text-left block">
-              {{lyrics.content}}
-          </div>
-          <div class="has-text-right mt-5 block">
-              --{{lyrics.author}}
-          </div>
-    </el-card>
+    <article class="message">
+        <div class="message-header">
+         <p>🥳 每日歌词</p>
+        </div>
+        <div class="message-body">
+            <p> {{lyrics.content}} </p>
+            <strong>--{{lyrics.author}} </strong>
+        </div>
+    </article>
 </template>
 
 <script>
@@ -33,7 +31,5 @@ export default ({
 </script>
 
 <style scoped>
-    .el-card{
-            margin-bottom:20px; /*下边距*/
-        }
+
 </style>

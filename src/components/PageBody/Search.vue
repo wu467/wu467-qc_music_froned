@@ -1,14 +1,15 @@
 <template>
-  <div>
+  <div class="soso">
     <el-row>
-        <el-col :span="12">
-          <el-input type="text" v-model="searchVal" placeholder="搜你想搜~"></el-input>
-        </el-col>
-        <el-col :span="4">
-          <router-link tag="div" :to="'/SearchListSongs/'+ this.searchVal ">
+      <el-col :span="6"> .</el-col>
+      <el-col :span="10">
+        <el-input type="text" v-model="searchVal" placeholder="搜你想搜~"></el-input>
+      </el-col>
+      <router-link :to="'/ListSongs/'+this.searchVal+'/'+rets" target='_blank'>
+        <el-col :span="2">
             <el-button type="primary" icon="el-icon-search"></el-button>
-          </router-link> 
         </el-col>
+      </router-link> 
     </el-row>
   </div>
 </template>
@@ -20,12 +21,20 @@ export default {
   data() {
     return {
       searchVal: '',
-      hotWord:'',
+      rets: this.ret
+    }
+  },
+  props: {
+    ret:{
+      type: String,
     }
   },
   methods: {
   }
-  
 
 }
 </script>
+
+<style scoped>
+
+</style>

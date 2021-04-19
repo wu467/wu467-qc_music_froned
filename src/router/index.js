@@ -1,24 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+
 Vue.use(VueRouter)
 
-const routes = [
+const routes = [  
   {
-    path: '/',
+    path: '',
     name: 'Home',
     component: () => import('@/views/Home')
   },
   {
-    path: '/ListSongs/:content_id',
+    path: '/ListSongs/:content/:rets',
     name: 'ListSongs',
     component: () => import('@/components/PageBody/BaseListSongs.vue')
   },
-  {
-    path: '/SearchListSongs/:keyWord',
-    name: 'SearchListSongs',
-    component: () => import('@/components/PageBody/SearchBaseListSongs.vue')
-  },
+
 
 ]
 
