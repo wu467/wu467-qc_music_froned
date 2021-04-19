@@ -1,5 +1,6 @@
 <!-- 推荐歌单里的歌曲 -->
 <template>
+
   <div>
     <div>
       <!-- 不同：组件初始化无值，加载时组件的值就会出现undefine，所以初始化组件时要先给一个值（这里用过滤器赋给tableData为空的值）
@@ -41,36 +42,37 @@ import {getData} from '@/api/music_api/musicApi'
         tableData: [],  
         pageSize: 9,  
         currentPage:1,
-        rets: '',
-        content: '',
-        keyWord: ''
+        parentData:( this.parentComponentData || 'search') //父组件传递给子组件的对象数据
       }
     },
-    created(){
+    props: {
+      parentComponentData: {  // 接受父组件传递过来的对象
+        type: Object
+      }
+    },
+    created(){ //html加载完成之前，执行。
       this.fetchSongs()
+    },
+    //html加载完成后，执行。因为其他父组件也调用了该组件，所以一开始该组件就已经初始化了（还未通过Search组件搜索跳转时），
+    //此时获取的 this.$route.params.searchVal 为 undefine，必须要等到页面加载完后再获取searchVal
+    mounted() { 
+      const searchV = (this.$route.params.searchVal || '')  //使用过滤器，当this.$route.params.searchVal有值时就用该值，无值时则赋值为 ''
+      // 从请求路径获取完searchVal后，调用api接口，传入请求status和搜索值。将其返回的数据再次渲染到页面显示
+       if (searchV != ''){  //当this.$route.params.searchVal获取到值时，则证明使用了Search组件
+        getData('search', searchV).then((response) =>{
+          this.tableData = response.data.data.song.list
+        })
+      }
     },
     methods: {
       async fetchSongs(){
-
-        this.content = this.$route.params.content  //不同，获取playListShare组件调用该组件时传过来的参数 content_id
-        this.keyWord = this.$route.params.keyWord  
-        if(this.$route.params.rets != null){
-          this.rets =  this.$route.params.rets
-        } else {
-          this.rets = 'new'
-        }
-
-        console.log(this.keyWord)
-
-        getData(this.rets,this.content,this.keyWord).then((response) =>{
-            //根据rest的取值，调用不同的赋值方法
-            if(this.rets == 'share'){
+        getData(this.parentData.mark, this.parentData.unsureContent).then((response) =>{
+            if (this.parentData.mark == 'share'){
               this.tableData = response.data.data.songlist 
-            } else if (this.rets == 'search'){
-              this.tableData = response.data.data.song.list
-            } else {
+            } 
+            else if (this.parentData.mark == 'new'){
               const data = response.data.data.list
-              // js修改key名 替换数组中歌曲的键名键名
+              // js修改key名 替换数组中歌曲的键名，和歌曲的唯一id，便于管理。
               let newData = [];  //创建一个新数组接收
               let obj = {};  //创建一个临时对象
               data.map(item => {
@@ -81,6 +83,9 @@ import {getData} from '@/api/music_api/musicApi'
                 newData.push(obj);     //将替换后的对象重新放入新的数组中
               })
               this.tableData = newData;
+            } 
+            else {
+              console.log("获取数据错误")
             }
         })
       }, 
@@ -89,7 +94,6 @@ import {getData} from '@/api/music_api/musicApi'
         this.currentPage = val;
       },
       playSong : function(index){
-        //不同：NewSongs中api返回的数据中键名为mid的值是歌曲的唯一id，而歌单列表中则是键名songmid
         const songmid = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)[index].songmid  
         this.fetchPlay(songmid)                                                                                               
       },
@@ -99,7 +103,8 @@ import {getData} from '@/api/music_api/musicApi'
           window.open(url,'_blank')   
         })
       } 
-    }
+    },
+    
   })
 
 </script>

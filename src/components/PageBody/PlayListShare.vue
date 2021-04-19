@@ -1,35 +1,39 @@
 <template>
 <div>
-  <el-row>
+  <el-row  v-if="!songlist_visible">
     <el-col :span="6" v-for="(item, index) of list" :key="index">
       <el-card :body-style="{ padding: '0px' }" class="card" >
-        <!-- 点击歌单图片跳转到子组件 -->
-        <router-link :to="'/ListSongs/'+ item.content_id +'/'+rets " target='_blank'>
-          <img v-bind:src="item.cover" class="image">  
-          <div class="playListTitle">
-              <span style="">{{item.title}}</span>
-          </div>
-        </router-link>
+        <img v-bind:src="item.cover" class="image" @click="showSongList(item.content_id)">  
+        <div class="playListTitle">
+            <span> {{item.title}}</span>
+        </div>
       </el-card>
     </el-col>
   </el-row>
+
+  <!-- 子组件（歌曲列表）的显示与隐藏 -->
+  <base-list-songs v-bind:parentComponentData="toSonData" v-if="songlist_visible"/>
+
 </div>
 </template>
 
 <script>
- import {getPlayList} from '@/api/music_api/playList'  //导入获取歌单列表
+import {getPlayList} from '@/api/music_api/playList'  //导入获取歌单列表
+import BaseListSongs from '@/components/PageBody/BaseListSongs'
 
 export default ({
     data() {
       return {
-        list: [],
-        rets: this.ret
+        list: [],  //歌单列表数据
+        songlist_visible: false,  // 控制子组件显示与隐藏的标识，类型为Boolean
+        toSonData: {  // 传递给子组件的数据（对象形式）
+          mark: 'share',
+          unsureContent: ''
+        }
       }
     },
-    props: {
-      ret:{
-        type: String,
-      }
+    components: {
+      BaseListSongs
     },
     created(){
         this.fetchPlayList()
@@ -40,9 +44,12 @@ export default ({
             const value = response.data  // http响应对象的data属性（json格式）
             this.list = value.data.list 
         })
+      },
+      showSongList(content_id){
+        this.songlist_visible = !this.songlist_visible    //隐藏显示父/子组件
+        this.toSonData.unsureContent = content_id    //点击后将歌单的唯一id传递给子组件对象的unsureContent
       }
     },
-
 })
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-    <base-list-songs/>
+    <base-list-songs v-bind:parentComponentData="toSonData" />
 </template>
 
 <script>
@@ -8,19 +8,13 @@ import BaseListSongs from '@/components/PageBody/BaseListSongs'
 export default ({
   data() {
     return {
-      rets: this.ret,
-    }
-  },
-  props: {
-    ret:{
-      type: String,
+      toSonData: {
+        mark: 'new',
+      }
     }
   },
   components: {
     BaseListSongs,
-  },
-  create(){
-    console.log(this.rets)
   }
 })
 </script>

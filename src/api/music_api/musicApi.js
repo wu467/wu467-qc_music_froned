@@ -3,8 +3,7 @@ import axios from 'axios'
 /** 整合各个api
  * 
  * @param {*} status 调用请求路径的标识
- * @param {*} content 分享歌单的唯一id 
- * @param {*} keyWord 关键字
+ * @param {*} content 
  * @returns 返回歌曲数据
  */
 export function getData(status,content) {
