@@ -104,6 +104,14 @@ import {getData} from '@/api/music_api/musicApi'
         const songmid = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)[index].songmid  
         this.fetchPlay(songmid)                                                                                               
       },
+      favoriteSong : function(){
+        this.$notify({
+          title: '没有登录',
+          message: '   登录后再收藏吧~',
+          type: 'warning',
+          showClose: false,
+        });        
+      },
       async fetchPlay(songmid){
         getPlayMusic(songmid).then(response=>{
           const url = response.data.data[songmid]

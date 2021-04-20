@@ -1,13 +1,16 @@
 <template>
-    <article class="message">
-        <div class="message-header">
-         <p>🥳 个人信息</p>
-        </div>
-        <div class="message-body">
-            <p> {{lyrics.content}} </p>
-            <p> <strong>{{lyrics.author}} </strong> </p>
-        </div>
-    </article>
+        <article class="message is-success">
+            <div class="message-header">
+                <p>🧘 个人信息</p>
+            </div>
+            <div class="section">
+                <el-row>
+                    <b-button  size="is-medium" type="is-success" outlined>💡 登录</b-button>
+                    <span v-html="'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'"/>   <!-- 解决占位符在vue中无效的方法 -->
+                    <b-button  size="is-medium" type="is-danger" outlined>🎉注册</b-button>
+                </el-row>
+            </div>
+        </article>
 </template>
 
 <script>
@@ -32,6 +35,9 @@ export default ({
 
 <style scoped>
     .el-card{
-            margin-bottom:20px; /*下边距*/
-        }
+        margin-bottom: 20px; /*下边距*/
+    }
+    .section {
+        text-align: center;
+    }
 </style>
