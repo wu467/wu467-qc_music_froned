@@ -12,7 +12,8 @@
   </el-row>
 
   <!-- 子组件（歌曲列表）的显示与隐藏 -->
-  <base-list-songs v-bind:parentComponentData="toSonData" v-if="songlist_visible"/>
+  <base-list-songs v-bind:parentComponentData="toSonData" v-if="songlist_visible" @closeBaseListSongs="showPlayList" />
+
 
 </div>
 </template>
@@ -48,6 +49,9 @@ export default ({
       showSongList(content_id){
         this.songlist_visible = !this.songlist_visible    //隐藏显示父/子组件
         this.toSonData.unsureContent = content_id    //点击后将歌单的唯一id传递给子组件对象的unsureContent
+      },
+      showPlayList(){
+        this.songlist_visible = !this.songlist_visible    //隐藏显示父/子组件
       }
     },
 })

@@ -10,10 +10,12 @@
         <el-table-column prop="songname" label="歌曲" width="240"> </el-table-column>
         <el-table-column prop="singer[0].name" label="歌手" width="180"> </el-table-column>
         <el-table-column prop="time" label="时长"></el-table-column>
-
         <el-table-column>
+          <template slot="header" slot-scope="{}">
+            <el-button v-if="showButton" @click="backTrack()" type="success" round>返回歌单</el-button>  
+          </template>
           <template slot-scope="scope">
-          <el-button icon="el-icon-headset" size="mini" type="success" @click="playSong(scope.$index)">播放</el-button>
+            <el-button icon="el-icon-headset" size="mini" type="success" @click="playSong(scope.$index)">播放</el-button>
             <el-button icon="el-icon-star-off" size="mini" type="info" @click="favoriteSong(scope.$index, scope.row)">收藏</el-button>
           </template>
         </el-table-column>
@@ -42,6 +44,7 @@ import {getData} from '@/api/music_api/musicApi'
         tableData: [],  
         pageSize: 9,  
         currentPage:1,
+        showButton: false,
         parentData:( this.parentComponentData || 'search') //父组件传递给子组件的对象数据
       }
     },
@@ -68,6 +71,7 @@ import {getData} from '@/api/music_api/musicApi'
       async fetchSongs(){
         getData(this.parentData.mark, this.parentData.unsureContent).then((response) =>{
             if (this.parentData.mark == 'share'){
+              this.showButton = true;  //如果是父组件分享歌单调用该子组件，则显示返回按钮
               this.tableData = response.data.data.songlist 
             } 
             else if (this.parentData.mark == 'new'){
@@ -79,8 +83,8 @@ import {getData} from '@/api/music_api/musicApi'
                 obj = item;
                 obj['songname'] = item['name'];  //替换键名
                 obj['songmid'] = item['mid']
+                newData.push(obj);     //将替换后的键值对放入新的数组中
                 delete obj['keyName'];  //替换后删除，也可以不删除
-                newData.push(obj);     //将替换后的对象重新放入新的数组中
               })
               this.tableData = newData;
             } 
@@ -92,6 +96,9 @@ import {getData} from '@/api/music_api/musicApi'
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.currentPage = val;
+      },
+      backTrack : function(){
+        this.$emit("closeBaseListSongs")
       },
       playSong : function(index){
         const songmid = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)[index].songmid  

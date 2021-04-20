@@ -14,6 +14,7 @@
         <main-list/>
       </div>
     </div>
+    
   </div>
 </template>
 
