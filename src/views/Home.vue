@@ -1,12 +1,12 @@
 <template>
   <div>
     <!--通知栏-->
-    <div class="box">🔔  {{notice.content}} </div>
+    <div class="box">🔔 {{this.content}} </div>
 
     <!-- 内容 -->
     <div class="columns">
       <div class="column">
-        <!-- 侧边栏 -->
+        <!-- 左侧边栏 -->
         <left-sidebar/>
       </div>
       <div class="column is-three-quarters">
@@ -14,7 +14,6 @@
         <main-list/>
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -28,28 +27,34 @@ export default {
   name: 'Home',
   data() {
     return {
-      notice: {
-        content: '这是测试阶段、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、留言板'
-      },
-
+      notice: '',   //所有通知数组
+      content: '',  //通知内容
+      n_index: 0,   //通知数组下标
     }
   },
   created() {
     this.fetchNotices()
   },
+  mounted() {
+    setInterval(this.get, 5000)
+  },
   methods: {
     async fetchNotices() {
-      getNotices().then((value) =>{
-        const {data} = value
-        this.notice = data
+      getNotices().then((response) =>{
+        this.notice = response.data
       })
+    },
+    //定时器方法
+    get(){
+      if(this.n_index == this.notice.length){
+        this.n_index = 0;
+      }
+      this.content = this.notice[this.n_index++].content;
     }
   }
+
 }
 
 
 </script>
 
-<style >
-
-</style>

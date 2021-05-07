@@ -19,6 +19,7 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     // 如果自定义代码不是200，则将其判断为错误。
+    console.log('状态码是：'+ res.code)
     if (res.code !== 200) {
       // 50008: 非法Token; 50012: 异地登录; 50014: Token失效;
       if (res.code === 401 || res.code === 50012 || res.code === 50014) {

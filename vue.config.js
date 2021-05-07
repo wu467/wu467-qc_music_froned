@@ -21,6 +21,15 @@ module.exports = {
                 pathRewrite: {
                     '^/soso': '/soso'
                 }
+            },
+            // 拦截向后台请求
+            '/back': {
+                target: 'http://localhost:8081/',
+                changOrigin: true,  //是否开启跨域
+                timeout: 30000,     //设置请求超时的时间
+                pathRewrite: {
+                    '^/back': ''
+                }
             }
         }
     }

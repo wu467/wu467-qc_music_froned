@@ -41,7 +41,7 @@ export default ({
     },
     methods: {
       async fetchPlayList(){
-        getPlayList(this.rets).then((response) =>{
+        getPlayList().then((response) =>{
             const value = response.data  // http响应对象的data属性（json格式）
             this.list = value.data.list 
         })

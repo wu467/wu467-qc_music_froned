@@ -10,12 +10,14 @@
             <div class="has-text-right">
                  -{{'by '+lyrics.author}}
             </div>        
-             
+             <a href="/back/notice/findAllNotice">查询所有系统通知</a>
         </div>
     </article>
 </template>
 
 <script>
+
+// import {getNotices} from '@/api/notices'
 
 export default ({
     name: 'DailyLyrics',
