@@ -15,8 +15,11 @@ const routes = [
     name: 'ListSongs',
     component: () => import('@/components/PageBody/BaseListSongs.vue')
   },
-
-
+  {
+    path: '/Register',
+    name: 'Register',
+    component: ()=>import('@/views/register/Register.vue')
+  }
 ]
 
 const router = new VueRouter({

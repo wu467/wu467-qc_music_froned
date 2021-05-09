@@ -7,7 +7,10 @@
                 <el-row>
                     <b-button  size="is-medium" type="is-success" outlined>💡 登录</b-button>
                     <span v-html="'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'"/>   <!-- 解决占位符在vue中无效的方法 -->
-                    <b-button  size="is-medium" type="is-danger" outlined>🎉注册</b-button>
+                    <!-- 跳转到注册路由 -->
+                    <router-link :to="'/Register'" target='_blank' >
+                        <b-button  size="is-medium" type="is-danger" outlined>🎉注册</b-button>
+                    </router-link>
                 </el-row>
             </div>
         </article>
