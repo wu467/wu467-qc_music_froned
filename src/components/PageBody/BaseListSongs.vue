@@ -16,7 +16,7 @@
           </template>
           <template slot-scope="scope">
             <el-button icon="el-icon-headset" size="mini" type="success" @click="playSong(scope.$index)">播放</el-button>
-            <el-button icon="el-icon-star-off" size="mini" type="info" @click="favoriteSong(scope.$index, scope.row)">收藏</el-button>
+            <el-button icon="el-icon-star-off" size="mini" type="info" @click="favoriteSong(scope.$index)">收藏</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -36,7 +36,8 @@
 <script>
 import {getPlayMusic} from '@/api/music_api/playMusic'
 import {getData} from '@/api/music_api/musicApi'
- 
+import {getCookie} from '@/utils/auth'  //获取用户cookie
+import {getFavoriteSong} from '@/api/backStage_api/favoriteSong' //向后端请求收藏api
 
   export default ({
     data() {
@@ -45,7 +46,7 @@ import {getData} from '@/api/music_api/musicApi'
         pageSize: 9,  
         currentPage:1,
         showButton: false,
-        parentData:( this.parentComponentData || 'search') //父组件传递给子组件的对象数据
+        parentData:( this.parentComponentData || 'search'), //父组件传递给子组件的对象数据
       }
     },
     props: {
@@ -71,7 +72,7 @@ import {getData} from '@/api/music_api/musicApi'
       async fetchSongs(){
         getData(this.parentData.mark, this.parentData.unsureContent).then((response) =>{
             if (this.parentData.mark == 'share'){
-              this.showButton = true;  //如果是父组件分享歌单调用该子组件，则显示返回按钮
+              this.showButton = true;  //如果是父组件分享歌单 调用该子组件，则显示返回按钮
               this.tableData = response.data.data.songlist 
             } 
             else if (this.parentData.mark == 'new'){
@@ -102,22 +103,33 @@ import {getData} from '@/api/music_api/musicApi'
       },
       playSong : function(index){
         const songmid = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)[index].songmid  
-        this.fetchPlay(songmid)                                                                                               
-      },
-      favoriteSong : function(){
-        this.$notify({
-          title: '没有登录',
-          message: '   登录后再收藏吧~',
-          type: 'warning',
-          showClose: false,
-        });        
-      },
-      async fetchPlay(songmid){
-        getPlayMusic(songmid).then(response=>{
+        getPlayMusic(songmid).then(response=>{ //跳转播放
           const url = response.data.data[songmid]
           window.open(url,'_blank')   
-        })
-      } 
+        })                                                                                               
+      },
+      favoriteSong : function(index){
+         // 点击收藏按钮后，获取浏览器中的用户cookie信息，如果有则收藏，没有则提示用户登录
+        const cookie = getCookie("username");
+        if (cookie == null){
+          this.$notify({
+            title: '没有登录',
+            message: '   登录后再收藏吧~',
+            type: 'warning',
+            showClose: false,
+          }); 
+        } else {
+          const uid = getCookie("userId")  //从cookie中获取uesId
+          var userId = parseInt(uid);   //将字符串类型的userId转换为数值型，与后台接受的类型保持一致。
+          //获取当前点击歌曲的songmid
+          const songmid = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)[index].songmid  
+          // 调用收藏歌曲api，将userId和songmid传递给后台
+          getFavoriteSong(userId, songmid).then( res => {
+            console.log("收藏成功")
+            console.log(res)
+          });
+        }
+      },
     },
     
   })

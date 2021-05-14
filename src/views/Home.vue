@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       notice: '',   //所有通知数组
-      content: '',  //通知内容
+      content: '欢迎来到',  //通知内容
       n_index: 0,   //通知数组下标
     }
   },
