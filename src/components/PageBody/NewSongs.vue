@@ -1,5 +1,5 @@
 <template>
-    <base-list-songs v-bind:parentComponentData="toSonData" />
+    <base-list-songs v-bind:parentComponentData="toSonData" />    <!--引用子组件-->
 </template>
 
 <script>
@@ -9,7 +9,7 @@ export default ({
   data() {
     return {
       toSonData: {
-        mark: 'new',
+        mark: 'new',    // 传递给子组件的数据
       }
     }
   },

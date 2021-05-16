@@ -1,4 +1,3 @@
-<!-- 推荐歌单里的歌曲 -->
 <template>
 
   <div>
@@ -45,7 +44,7 @@ import {getFavoriteSong} from '@/api/backStage_api/favoriteSong' //向后端请�
         tableData: [],  
         pageSize: 9,  
         currentPage:1,
-        showButton: false,
+        showButton: false,  // 是否显示返回按钮
         parentData:( this.parentComponentData || 'search'), //父组件传递给子组件的对象数据
       }
     },
@@ -58,7 +57,7 @@ import {getFavoriteSong} from '@/api/backStage_api/favoriteSong' //向后端请�
       this.fetchSongs()
     },
     //html加载完成后，执行。因为其他父组件也调用了该组件，所以一开始该组件就已经初始化了（还未通过Search组件搜索跳转时），
-    //此时获取的 this.$route.params.searchVal 为 undefine，必须要等到页面加载完后再获取searchVal
+    //此时获取的 this.$route.params.searchVal(搜索值) 为 undefine，必须要等到页面加载完后再获取searchVal
     mounted() { 
       const searchV = (this.$route.params.searchVal || '')  //使用过滤器，当this.$route.params.searchVal有值时就用该值，无值时则赋值为 ''
       // 从请求路径获取完searchVal后，调用api接口，传入请求status和搜索值。将其返回的数据再次渲染到页面显示
@@ -126,7 +125,14 @@ import {getFavoriteSong} from '@/api/backStage_api/favoriteSong' //向后端请�
           // 调用收藏歌曲api，将userId和songmid传递给后台
           getFavoriteSong(userId, songmid).then( res => {
             console.log("收藏成功")
-            console.log(res)
+            console.log(res.code)
+            if(res.code == 200){
+              this.$notify({
+                title: '收藏成功！',
+                type: 'success',
+                showClose: false,
+              });               
+            }
           });
         }
       },
