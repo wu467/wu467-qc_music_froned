@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import {getPlayMusic} from '@/api/music_api/playMusic'
+import {getPlayMusic} from '@/api/music_api/playMusic'  //播放歌曲
 import {getData} from '@/api/music_api/musicApi'
 import {getCookie} from '@/utils/auth'  //获取用户cookie
 import {getFavoriteSong} from '@/api/backStage_api/favoriteSong' //向后端请求收藏api

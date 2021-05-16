@@ -1,8 +1,7 @@
 <template>
   <div>
     <!--通知栏-->
-    <div class="box">🔔 {{this.content}} </div>
-
+    <div class="box"><p>🔔 {{this.content}} </p></div>
     <!-- 内容 -->
     <div class="columns">
       <div class="column">
@@ -59,10 +58,11 @@ export default {
 </script>
 
 <style >
-    html {
-        background:url("../assets/06.jpg");
-        background-size: 100% 100%;
-        height: 100vh;
-    }
+  html {
+    background:url("../assets/06.jpg");
+    background-size: 100% 100%;
+    height: 100vh;
+  }
+    
 </style>
 
