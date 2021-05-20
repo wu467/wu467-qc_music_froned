@@ -36,11 +36,10 @@ export default {
       const uid = getCookie('userId')
       var userId = parseInt(uid) 
       this.toSonData = userId
-
-      alert("传递的uid："+ userId)
     }
   },
   methods:{
   }
 }
+
 </script>

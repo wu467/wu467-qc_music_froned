@@ -13,7 +13,7 @@ module.exports = {
                     '^/api': ''
                 }
             },
-            // 拦截请求以 '/new' 开头的地址
+            // 拦截请求以 '/搜搜' 开头的地址  搜索api
             '/soso': {   
                 target: 'https://c.y.qq.com',  //要跨域的域名
                 changOrigin: true,  //是否开启跨域
@@ -22,7 +22,16 @@ module.exports = {
                     '^/soso': '/soso'
                 }
             },
-            // 拦截向后台请求
+            // 拦截请求以 '/pic' 开头的地址  获取歌曲图片
+            '/pic': {   
+                target: 'http://y.gtimg.cn/',  //要跨域的域名
+                changOrigin: true,  //是否开启跨域
+                timeout: 30000,     //设置请求超时的时间
+                pathRewrite: {
+                    '^/pic': ''
+                }
+            },
+            // 拦截向后台的请求
             '/back': {
                 target: 'http://localhost:8081/',
                 changOrigin: true,  //是否开启跨域

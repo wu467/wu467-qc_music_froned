@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <!--通知栏-->
     <div class="box"><p>🔔 {{this.content}} </p></div>
     <!-- 内容 -->
@@ -57,12 +57,12 @@ export default {
 
 </script>
 
-<style >
+<style scope>
   html {
-    background:url("../assets/06.jpg");
-    background-size: 100% 100%;
-    height: 100vh;
-  }
-    
+    width: 100%;
+    height: 100%;
+    background-image: url("../assets/06.jpg");
+    background-size: cover;
+  }    
 </style>
 

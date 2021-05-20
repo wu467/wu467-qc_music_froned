@@ -83,10 +83,11 @@ import {getFavoriteSong} from '@/api/backStage_api/favoriteSong' //向后端请�
                 obj = item;
                 obj['songname'] = item['name'];  //替换键名
                 obj['songmid'] = item['mid']
+                obj['albummid'] = item.album.mid
                 newData.push(obj);     //将替换后的键值对放入新的数组中
-                delete obj['keyName'];  //替换后删除，也可以不删除
               })
               this.tableData = newData;
+              console.log(newData[0])
             } 
             else {
               console.log("获取数据错误")
@@ -101,7 +102,12 @@ import {getFavoriteSong} from '@/api/backStage_api/favoriteSong' //向后端请�
         this.$emit("closeBaseListSongs")
       },
       playSong : function(index){
-        const songmid = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)[index].songmid  
+        const currentSong = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)[index]  //当前点击歌曲
+        const songmid = currentSong.songmid //选中歌曲的songmid
+        const albummid = currentSong.albummid //选中歌曲的albummid
+
+        this.$store.commit('changeDataAlbumMid',albummid) //将获取到的歌曲ablummid交给vuex管理
+
         getPlayMusic(songmid).then(response=>{ //跳转播放
           const url = response.data.data[songmid]
           window.open(url,'_blank')   
@@ -128,11 +134,17 @@ import {getFavoriteSong} from '@/api/backStage_api/favoriteSong' //向后端请�
             console.log(res.code)
             if(res.code == 200){
               this.$notify({
-                title: '收藏成功！',
+                title: res.msg,
                 type: 'success',
                 showClose: false,
               });               
-            }
+            } else if(res.code == 201) {
+                this.$notify({
+                  title: res.msg,
+                  type: 'success',
+                  showClose: false,
+                });
+              }
           });
         }
       },

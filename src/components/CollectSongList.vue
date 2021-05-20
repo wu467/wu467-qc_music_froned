@@ -11,7 +11,7 @@
       <el-table-column>
         <template slot-scope="scope">
         <el-button icon="el-icon-headset" size="mini" type="success" @click="playSong(scope.$index)">播放{{scope.$index}}</el-button>
-          <el-button icon="el-icon-star-off" size="mini" type="info" @click="favoriteSong(scope.$index, scope.row)">收藏</el-button>
+          <el-button icon="el-icon-star-off" size="mini" type="danger" @click="favoriteSong(scope.$index, scope.row)">收藏</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -48,7 +48,6 @@ import {getSongBatch} from '@/api/music_api/songBatch.js' //从qq音乐中获取
     }
     },
     created(){
-      alert(this.userId)
       this.fetchCollection(this.userId);  //获取用户收藏歌曲
     },
     methods: {

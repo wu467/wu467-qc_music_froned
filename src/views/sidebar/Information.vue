@@ -5,23 +5,27 @@
             </div>
             <div class="section">
                 <!-- 存在用户cookie，显示用户个人信息 -->
-                <el-row v-if="!this.infoVisible">
-                    <el-avatar shape="square" :size="100" :fit="fit" :src="url"></el-avatar>
-                                        <a href="/back/user/signOut">退出登录</a>
-                    {{this.userCookie}}
-                </el-row>
+                <div v-if="!this.infoVisible">
+                    <el-avatar shape="square" :size="80" :src="url"></el-avatar>
+                    <div class="username">
+                        <span>{{this.userCookie}}</span>
+                        <p><span>收藏歌曲：3首</span></p>
+                        <p><a href="/back/user/signOut" style="text-decoration: none">退出登录</a></p>
+                    </div>
+                </div>
+
                 <!-- 不存在，显示登陆与注册按钮 -->
-                <el-row v-if="this.infoVisible">
+                <div v-if="this.infoVisible">
                     <!-- 跳转到登录页面 -->
-                    <router-link :to="'/Login'" target='_blank' >
+                    <router-link :to="'/Login'" target='_blank' style="text-decoration: none">
                         <b-button  size="is-medium" type="is-success" outlined>💡 登陆</b-button>
                     </router-link>
                     <span v-html="'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'"/>   <!-- 解决占位符在vue中无效的方法 -->
                     <!-- 跳转到注册路由 -->
-                    <router-link :to="'/Register'" target='_blank' >
+                    <router-link :to="'/Register'" target='_blank' style="text-decoration: none">
                         <b-button  size="is-medium" type="is-danger" outlined>🎉注册</b-button>
                     </router-link>
-                </el-row>
+                </div>
             </div>
         </article>
 </template>
@@ -58,7 +62,16 @@ export default ({
 </script>
 
 <style scoped>
-    .section {
-        text-align: center;
+
+    .section{
+        height: 115px;
+        width: 300px;
+        padding: 20px;
+        margin: 0%;
     }
+    .username{
+        margin-top: -80px;
+        margin-left: 100px;
+    }
+
 </style>
