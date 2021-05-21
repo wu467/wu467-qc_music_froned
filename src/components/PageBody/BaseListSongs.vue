@@ -104,13 +104,15 @@ import {getFavoriteSong} from '@/api/backStage_api/favoriteSong' //向后端请�
       playSong : function(index){
         const currentSong = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)[index]  //当前点击歌曲
         const songmid = currentSong.songmid //选中歌曲的songmid
-        const albummid = currentSong.albummid //选中歌曲的albummid
 
+        const albummid = currentSong.albummid //选中歌曲的albummid
+        const songName = currentSong.name   //选中歌曲的名称
+        this.$store.commit('changeDataName',songName)
         this.$store.commit('changeDataAlbumMid',albummid) //将获取到的歌曲ablummid交给vuex管理
 
-        getPlayMusic(songmid).then(response=>{ //跳转播放
+        getPlayMusic(songmid).then(response=>{ 
           const url = response.data.data[songmid]
-          window.open(url,'_blank')   
+          this.$store.commit('changeDataUrl',url)  //将获取到的歌曲播放链接交给vuex管理
         })                                                                                               
       },
       favoriteSong : function(index){

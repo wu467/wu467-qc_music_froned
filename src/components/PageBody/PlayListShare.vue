@@ -72,13 +72,12 @@ export default ({
   }
 
   /* 鼠标悬浮图片变大过渡 */
-  img{
+  .card img{
     cursor: pointer;
     transition: all 0.6s;
-    /* border-radius: 25px; */
   }
 
-  img:hover{
+  .card img:hover{
     /* 鼠标悬浮图片变大 */
     transform: scale(1.1);
     /* 鼠标悬浮图片变灰和透明 */
