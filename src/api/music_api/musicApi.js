@@ -3,7 +3,7 @@ import axios from 'axios'
 /** 整合各个api
  * 
  * @param {*} status 调用请求路径的标识
- * @param {*} content 
+ * @param {*} content 不确定内容，当shareList组件调用时，值为歌单id。当search组件调用时，值为搜索关键字
  * @returns 返回歌曲数据
  */
 export function getData(status,content) {

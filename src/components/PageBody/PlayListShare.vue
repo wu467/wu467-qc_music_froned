@@ -1,21 +1,22 @@
 <template>
-<div>
-  <el-row  v-if="!songlist_visible">
-    <el-col :span="6" v-for="(item, index) of list" :key="index">
-      <el-card :body-style="{ padding: '0px' }" class="card" >
-        <img v-bind:src="item.cover" class="image" @click="showSongList(item.content_id)">  
-        <div class="playListTitle">
-            <span> {{item.title}}</span>
-        </div>
-      </el-card>
-    </el-col>
-  </el-row>
+  <div>
+    <!-- 切换组件是使用elementUI的内置过渡动画 -->
+    <transition name="el-zoom-in-center">
+      <el-row  v-if="!songlist_visible">
+        <el-col :span="6" v-for="(item, index) of list" :key="index">
+          <el-card :body-style="{ padding: '0px' }" class="card" >
+            <img v-bind:src="item.cover" class="image" @click="showSongList(item.content_id)">  
+            <div class="playListTitle">
+                <span  class="basic-r" style='width:120px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;'> {{item.title}}</span>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
 
-  <!-- 子组件（歌曲列表）的显示与隐藏 -->
-  <base-list-songs v-bind:parentComponentData="toSonData" v-if="songlist_visible" @closeBaseListSongs="showPlayList" />
-
-
-</div>
+      <!-- 子组件（歌曲列表）的显示与隐藏 -->
+      <base-list-songs v-bind:parentComponentData="toSonData" v-if="songlist_visible" @closeBaseListSongs="showPlayList" />
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -55,6 +56,17 @@ export default ({
       }
     },
 })
+
+  window.onload=function checkScrollLeft(){
+    alert(document.getElementsByTagName('span').length)
+    // // 判断文字长度是否大于盒子长度
+    // if(document.getElementsByTagName('span').length > wrapWidth) {
+    //   // 开始滚动  触发事件
+    //   text.style.paddingRight = '300px'
+    //   cont.style.left = "-870px"
+    // }
+  }
+
 </script>
 
 <style>
@@ -66,7 +78,7 @@ export default ({
   .playListTitle {
     font-size: 12px; 
     margin-top: 10px;
-    margin-block-end: 5px;
+    margin-bottom: 2px;
     text-align: center;
     color: black;
   }

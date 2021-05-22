@@ -11,11 +11,6 @@ const routes = [
     component: () => import('@/views/Home')
   },
   {
-    path: '/ListSongs/:searchVal',
-    name: 'ListSongs',
-    component: () => import('@/components/PageBody/BaseListSongs.vue')
-  },
-  {
     path: '/Register',
     name: 'Register',
     component: ()=>import('@/views/register/Register.vue')

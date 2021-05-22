@@ -6,12 +6,12 @@
     <el-table :data="(tableData || '').slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%" >
       <el-table-column prop="track_info.name" label="歌曲" width="240"> </el-table-column>
       <el-table-column prop="track_info.singer[0].name" label="歌手" width="180"> </el-table-column>
-      <el-table-column prop="time" label="时长"></el-table-column>
+      <el-table-column prop="time"></el-table-column>
 
       <el-table-column>
         <template slot-scope="scope">
-        <el-button icon="el-icon-headset" size="mini" type="success" @click="playSong(scope.$index)">播放{{scope.$index}}</el-button>
-          <el-button icon="el-icon-star-off" size="mini" type="danger" @click="favoriteSong(scope.$index, scope.row)">收藏</el-button>
+        <el-button icon="el-icon-headset" size="small" type="success" @click="playSong(scope.$index)">播放</el-button>
+          <el-button icon="el-icon-star-off" size="small " type="danger" @click="favoriteSong(scope.$index, scope.row)">收藏</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -57,7 +57,10 @@ import {getSongBatch} from '@/api/music_api/songBatch.js' //从qq音乐中获取
             getSongBatch(res.data).then((response) => {
               console.log("用户收藏歌曲的基本信息")
               var songMessage = response.data.data         //  获取到了收藏歌曲的基本信息
-              console.log(songMessage)
+              this.currentSong = songMessage
+
+                            console.log("标记")
+                            console.log(songMessage)
 
               // 根据songMessage对象的键的个数创建一个数组
               var songList = new Array()
@@ -69,15 +72,14 @@ import {getSongBatch} from '@/api/music_api/songBatch.js' //从qq音乐中获取
                   songList.push(songMessage["song"])
                   delete songMessage[key]
               }
-              console.log("标记")
-              console.log(songList)
 
               //判断songList数组是否有值，无则提示用户无收藏歌曲，有则将该数组传递给子组件
               if(songList.length == 0){
                 // 提示无收藏歌曲
               } else {
                  this.tableData = songList
-                 console.log(songList)
+                            console.log("标记3333")
+                            console.log(songList)                 
               }
             })
           })
@@ -87,14 +89,18 @@ import {getSongBatch} from '@/api/music_api/songBatch.js' //从qq音乐中获取
         this.currentPage = val;
       },
       playSong : function(index){
-        //不同：NewSongs中api返回的数据中键名为mid的值是歌曲的唯一id，而歌单列表中则是键名songmid
-        const songmid = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)[index].track_info.mid  
-        this.fetchPlay(songmid)                                                                                               
+        const currentSong = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)[index].track_info
+        const songmid = currentSong.mid  
+        this.fetchPlay(songmid)     
+
+        this.$store.commit('changeDataMid',songmid)   //将获取到的歌曲相关信息交给vuex管理
+        this.$store.commit('changeDataAlbumMid',currentSong.album.mid)
+        this.$store.commit('changeDataName',this.currentSong.name)
       },
       async fetchPlay(songmid){
         getPlayMusic(songmid).then(response=>{
           const url = response.data.data[songmid]
-          window.open(url,'_blank')   
+          this.$store.commit('changeDataUrl',url)          
         })
       } 
     }

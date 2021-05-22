@@ -1,23 +1,28 @@
 <template>
-     <el-container>
-    <el-aside>aside</el-aside>
-    <el-container>
-        <el-main>
-            <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="用户名" prop="userName">
-                    <el-input type="text" maxlength="10" v-model="ruleForm.userName"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" prop="password">
-                    <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-                    <a href="/back/user/signOut">退出登录</a>
-                </el-form-item>
-            </el-form>
-        </el-main>
-    </el-container>
- </el-container>
+    <div class="container">
+        <div class="aside">
+            <el-carousel  height="720px" indicator-position="outside">
+                <el-carousel-item v-for="item in 4" :key="item">
+                    <h3>{{ item }}</h3>
+                </el-carousel-item>
+            </el-carousel>
+        </div>
+        <div class="right_container">
+            <div class="right_main">
+                <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                    <el-form-item label="用户名" prop="userName">
+                        <el-input type="text" maxlength="10" v-model="ruleForm.userName"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" prop="password">
+                        <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -75,5 +80,50 @@ export default {
     }
 }
 
-
 </script>
+
+<style scoped>
+    /* 页面布局 */
+    .container{
+        width: 1500px;
+        height: 720px;
+        border: 1px solid red;
+        float: left;
+    }
+    .aside{
+        width: 670px;
+        height: 720px;
+        border: 1px solid green;
+        float: left;
+    }
+    .right_container{
+        width:  670px;
+        height: 70px;
+        border: 1px solid red;
+        float: left;
+        margin-right: 0%;
+    }
+    .right_main{
+        text-align: center;
+        /* border: 1px solid red; */
+        width: 450px;
+        height: 200px;
+        margin-left: 80px;
+        margin-top: 250px;
+    }
+
+    /* 轮播图 */
+    .el-carousel__item h3 {
+        color: #475669;
+        font-size: 18px;
+        opacity: 0.75;
+        line-height: 720px;
+        margin: 0;
+    }
+    .el-carousel__item:nth-child(2n) {
+        background-color: #99a9bf;
+    }
+    .el-carousel__item:nth-child(2n+1) {
+        background-color: #d3dce6;
+    }
+</style>

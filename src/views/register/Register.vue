@@ -4,9 +4,10 @@
     <el-aside>aside</el-aside>
     <el-container>
         <el-main>
+          <div class="formBorder">
             <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="用户名" prop="userName">
-                    <el-input type="text" maxlength="10" v-model="ruleForm.userName"></el-input>
+                    <el-input type="text" maxlength="10" v-model="ruleForm.userName" ></el-input>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="email">
                     <el-input v-model="ruleForm.email"></el-input>
@@ -23,6 +24,7 @@
                     <el-button @click="resetForm('ruleForm')">登录</el-button>
                 </el-form-item>
             </el-form>
+          </div>
         </el-main>
     </el-container>
  </el-container>
@@ -119,26 +121,32 @@
 
 
 <style>
-    .el-container {
-        width: 100%;                
-        height: 100%;
-        height: 100vh;
-    }
-    .el-main {
-        width: 100%;                
-        height: 100%;
-        border: solid 3px blue;
-        height: 100vh;
+    #building {
+      width: 100%;                
+      height: 100%;
+      height: 100vh;
+      border: 2px solid greenyellow;
     }
     .el-form {
-        text-align: center;
-        width: 400px;
+      text-align: center;
+      width: 400px;
+      border: solid 3px blue;
+      margin-left: 27%;
+      margin-top: 15%;
+    }
+    .formBorder{
+          border: 2px solid greenyellow;
+          height: 400px;
+          width: 600px;
+    }
+    .el-form-item {
+      border: solid 3px red;
     }
     .el-aside {
-        width: 100%;                
-        height: 100%;
-        border: solid 3px red;
-        height: 100vh;
+      width: 100%;                
+      height: 100%;
+      border: solid 3px red;
+      height: 100vh;
     }
 
     html {
