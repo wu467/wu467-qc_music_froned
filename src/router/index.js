@@ -13,12 +13,17 @@ const routes = [
   {
     path: '/Register',
     name: 'Register',
-    component: ()=>import('@/views/register/Register.vue')
+    component: ()=>import('@/components/PersonalCenter/register/Register.vue')
   },
   {
     path: '/Login',
     name: 'Login',
-    component: ()=>import('@/views/login/Login.vue')
+    component: ()=>import('@/components/PersonalCenter/login/Login.vue')
+  },
+  {
+    path: '/user/resPassword',
+    name: 'RestPassword',
+    component: ()=>import('@/components/PersonalCenter/RestPassword.vue')
   }
 ]
 

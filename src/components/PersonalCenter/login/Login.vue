@@ -2,8 +2,8 @@
     <div class="container">
         <div class="aside">
             <el-carousel  height="720px" indicator-position="outside">
-                <el-carousel-item v-for="item in 4" :key="item">
-                    <h3>{{ item }}</h3>
+                <el-carousel-item v-for="item in pics" :key="item.url">
+                    <img :src="item.url"/>
                 </el-carousel-item>
             </el-carousel>
         </div>
@@ -47,6 +47,12 @@ export default {
             }
         };
         return {
+            pics: [
+                { url: require("@/assets/loginImg/p1.png") },
+                { url: require("@/assets/loginImg/1.jpg") },
+                { url: require("@/assets/loginImg/1.jpg") },
+                { url: require("@/assets/loginImg/1.jpg") }
+            ],
             ruleForm: {
                 userName: '',
                 password: ''
@@ -57,7 +63,7 @@ export default {
                 ],
                 password: [
                     { validator: validatePass, trigger: 'blur' }
-                ],            
+                ],           
             }
         }
     },
@@ -72,7 +78,7 @@ export default {
                 this.$router.replace('/')
             });
           } else {
-            console.log('error submit!!');
+            console.log('提交错误！');
             return false;
           }
         });
@@ -113,7 +119,7 @@ export default {
     }
 
     /* 轮播图 */
-    .el-carousel__item h3 {
+    /* .el-carousel__item h3 {
         color: #475669;
         font-size: 18px;
         opacity: 0.75;
@@ -125,5 +131,5 @@ export default {
     }
     .el-carousel__item:nth-child(2n+1) {
         background-color: #d3dce6;
-    }
+    } */
 </style>

@@ -10,7 +10,13 @@
                     <div class="username">
                         <span>{{this.userCookie}}</span>
                         <p><span>收藏歌曲：3首</span></p>
-                        <p><a href="/back/user/signOut" style="text-decoration: none">退出登录</a></p>
+                        <p>
+                            <router-link :to="'/user/resPassword'" target='_blank' style="text-decoration: none">
+                                 <a style="text-decoration: none">修改密码</a>
+                            </router-link>
+                            <span v-html="'&nbsp;'"/><span v-html="'&nbsp;'"/><span v-html="'&nbsp;'"/>                              
+                            <a href="/back/user/signOut" style="text-decoration: none">退出登录</a>
+                        </p>
                     </div>
                 </div>
 

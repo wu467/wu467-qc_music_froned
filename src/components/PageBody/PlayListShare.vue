@@ -56,17 +56,6 @@ export default ({
       }
     },
 })
-
-  window.onload=function checkScrollLeft(){
-    alert(document.getElementsByTagName('span').length)
-    // // 判断文字长度是否大于盒子长度
-    // if(document.getElementsByTagName('span').length > wrapWidth) {
-    //   // 开始滚动  触发事件
-    //   text.style.paddingRight = '300px'
-    //   cont.style.left = "-870px"
-    // }
-  }
-
 </script>
 
 <style>

@@ -130,18 +130,17 @@
     .el-form {
       text-align: center;
       width: 400px;
-      border: solid 3px blue;
-      margin-left: 27%;
-      margin-top: 15%;
+      margin-top: 45px;
+      margin-left: 80px;
     }
     .formBorder{
-          border: 2px solid greenyellow;
-          height: 400px;
-          width: 600px;
+      border: 2px solid greenyellow;
+      height: 400px;
+      width: 600px;
+      margin-left: 200px;
+      margin-top: 100px;
     }
-    .el-form-item {
-      border: solid 3px red;
-    }
+
     .el-aside {
       width: 100%;                
       height: 100%;
@@ -149,9 +148,4 @@
       height: 100vh;
     }
 
-    html {
-        background:url("../../assets/06.jpg");
-        background-size: 100% 100%;
-        height: 100vh;
-    }
 </style>
