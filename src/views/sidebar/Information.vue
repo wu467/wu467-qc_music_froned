@@ -51,7 +51,7 @@ export default ({
     beforeMount() {
         // 该组件在创建完先进行判断是否存在用户cookie，如果存在则该组件显示用户基本信息，不存在则显示登录注册按钮
         const cookie = getCookie('username');
-         this.userCookie = cookie
+        this.userCookie = cookie
         // 根据获取的cookie是否为空，infomation组件显示不同的内容
         if(cookie != null){
             console.log("不为空")

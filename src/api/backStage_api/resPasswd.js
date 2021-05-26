@@ -5,10 +5,10 @@ import request from '@/utils/request'
  * @param {} email 
  * @returns 
  */
-export function resPassword(userId, newPassword) {
+export function resPassword(email, newPassword) {
   return request({
     url: '/back/user/resPassword',
     method: 'post',
-    params: { 'uid':userId, 'newPasswd': newPassword }  //向后端传递的参数
+    params: { 'newPasswd': newPassword, 'uEmail':email}  //向后端传递的参数
   })
 }

@@ -3,20 +3,23 @@
         <el-form-item label="密码" prop="pass">
             <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="新密码" prop="checkPass">
-            <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+        <el-form-item label="新密码" prop="newPass">
+            <el-input type="password" v-model="ruleForm.newPass" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="code">
             <el-input v-model.number="ruleForm.code"></el-input>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">修改密码</el-button>
-            <el-button @click="fetchVerificationCode('ruleForm.code')">获取验证码</el-button>
+            <el-button type="primary" @click="submitForm()">修改密码</el-button>
+            <el-button @click="fetchCode()">获取验证码</el-button>
         </el-form-item>
     </el-form>
 </template>
 
 <script>
+import {resPassword} from "@/api/backStage_api/resPasswd"
+import {sendCode} from "@/api/backStage_api/sendCode"
+import {getCookie} from '@/utils/auth'
 
 export default {
     data() {
@@ -29,8 +32,8 @@ export default {
         if (value === '') {
           callback(new Error('请输入密码'));
         } else {
-          if (this.ruleForm.checkPass !== '') {
-            this.$refs.ruleForm.validateField('checkPass');
+          if (this.ruleForm.newPass !== '') {
+            this.$refs.ruleForm.validateField('newPass');
           }
           callback();
         }
@@ -38,41 +41,56 @@ export default {
       var validatePass2 = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请再次输入密码'));
-        } else if (value == this.ruleForm.pass) {
+        } else if (value === this.ruleForm.pass) {
           callback(new Error('新密码不能为原密码！'));
         } else {
           callback();
         }
       };
       return {
+        randomNum: '',  //生成的验证码
+        userEmail: '', //存储从cookie中获取到的用户email
         ruleForm: {
           pass: '',
-          checkPass: '',
-          code: ''
+          newPass: '', 
+          code: '',     //填入的验证码
         },
         rules: {
-          pass: [
+            pass: [
             { validator: validatePass, trigger: 'blur' }
-          ],
-          checkPass: [
+            ],
+            newPass: [
             { validator: validatePass2, trigger: 'blur' }
-          ],
-          code: [
+            ],
+            code: [
             { validator: checkCode, trigger: 'blur' }
-          ]
-        }
+            ]
+        },
       };
     },
+    created() {
+      this.userEmail = getCookie('userMail')
+    },
     methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
+      submitForm() {
+          if(parseInt(this.ruleForm.code) !== parseInt(this.randomNum)) {
+            alert("验证码输入错误！")
+            return false;
+          }
+          else if (this.ruleForm !== null) {
+            // 向后端提交修改密码申请
+            resPassword(this.userEmail, this.ruleForm.newPass)
             alert('submit!');
-          } else {
+          } else  {
             console.log('error submit!!');
             return false;
           }
-        });
+      },
+      fetchCode(){
+        //生成六位随机数
+        this.randomNum = Math.random().toFixed(6).slice(-6)
+        // 将验证码和储存用户邮箱的cookie发送给后端
+        sendCode(this.userEmail, this.randomNum)
       }
     }
 }
