@@ -9,16 +9,25 @@
                 <el-form-item label="用户名" prop="userName">
                     <el-input type="text" maxlength="10" v-model="ruleForm.userName" ></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱" prop="email">
-                    <el-input v-model="ruleForm.email"></el-input>
-                </el-form-item>
                 <el-form-item label="密码" prop="pass">
                     <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="确认密码" prop="checkPass">
                     <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
                 </el-form-item>
-
+                <el-form-item label="邮箱" prop="email">
+                    <el-input v-model="ruleForm.email"></el-input>
+                </el-form-item>
+                <el-row>
+                  <el-col :span="14">
+                    <el-form-item label="验证码" prop="email">
+                        <el-input v-model="ruleForm.email"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-button type="success" @click="fetchCode()" :disabled="this.btnStatus" :key="this.compoKey" id="btn">获取验证码</el-button>
+                  </el-col>
+                </el-row>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
                     <el-button @click="resetForm('ruleForm')">登录</el-button>
@@ -76,6 +85,8 @@
         }
       };
       return {
+        btnStatus: false,  //设置按钮是否禁用
+        compoKey: 0,
         ruleForm: {
           userName: '',
           pass: '',
@@ -114,6 +125,30 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+
+      fetchCode(){
+        //获取邮箱发送验证码，判断验证码是否正确，正确则将表单信息提交给后台注册
+        
+        //设置获取验证码按钮禁用60s
+        var btn = document.getElementById("btn")
+        this.btnTime(btn);
+
+      },
+      btnTime(btn){
+        var num = 5
+        this.btnStatus = true;
+        var timer = setInterval(function () {
+          num--
+          btn.innerHTML = num + "s后重新获取"
+
+          if (num === 0) {
+            btn.innerHTML = '获取验证码';
+            this.btnStatus = false;
+            this.compoKey += 1;
+            clearInterval(timer)
+          }
+        }, 1000)
       }
     }
   }
