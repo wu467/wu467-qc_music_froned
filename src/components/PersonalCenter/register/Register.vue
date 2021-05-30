@@ -20,17 +20,18 @@
                 </el-form-item>
                 <el-row>
                   <el-col :span="14">
-                    <el-form-item label="验证码" prop="email">
-                        <el-input v-model="ruleForm.email"></el-input>
+                    <el-form-item label="验证码" prop="yzm">
+                        <el-input v-model="ruleForm.yzm"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="10">
-                    <el-button type="success" @click="fetchCode()" :disabled="this.btnStatus" :key="this.compoKey" id="btn">获取验证码</el-button>
+                    <el-button type="success" @click="getAuthCode" v-show="sendAuthCode">获取验证码</el-button>
+                    <el-button type="info" v-show="!sendAuthCode" disabled>{{this.auth_time}}s后重新获取</el-button>
                   </el-col>
                 </el-row>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
-                    <el-button @click="resetForm('ruleForm')">登录</el-button>
+                    <el-button @click="toLogin()">登录</el-button>
                 </el-form-item>
             </el-form>
           </div>
@@ -44,6 +45,7 @@
 <script>
   import {getEmail} from '@/api/backStage_api/getEmail'  //验证邮箱是否注册Api
   import {toRegister} from '@/api/backStage_api/toRegister'  //请求注册api 
+  import {sendCode} from "@/api/backStage_api/sendCode" // 向后端传递填入的邮箱，请求发送验证码
 
   export default {
     data() {
@@ -84,14 +86,25 @@
           callback();
         }
       };
+      var checkYzm = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('验证码不能为空！'));
+        } else if (value !== this.auto_yzm) {
+          callback(new Error('验证码错误!'));
+        } else {
+          callback();
+        }
+      };
       return {
-        btnStatus: false,  //设置按钮是否禁用
-        compoKey: 0,
+        sendAuthCode:true, /*布尔值，通过v-show控制显示‘获取按钮’还是‘倒计时’ */
+        auth_time: 5,  //按钮禁用倒计时时间
+        auto_yzm: '',  // 随机生成的六位验证码
         ruleForm: {
           userName: '',
           pass: '',
           checkPass: '',
-          email: ''
+          email: '',
+          yzm: ''
         },
         rules: {
           userName: [
@@ -104,9 +117,11 @@
             { validator: validatePass2, trigger: 'blur' }
           ],
           email: [
-            { message: '请输入邮箱地址', trigger: 'blur' },
             { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] },
             { validator: checkEmail, trigger: 'blur' }
+          ],
+          yzm : [
+            { validator: checkYzm, trigger: 'blur' }
           ]
         },
       };
@@ -115,40 +130,48 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            toRegister(this.ruleForm);
-            alert('submit!');
+            toRegister(this.ruleForm).then((res) => {
+              if(res.code === 200 ) {
+                alert("注册成功！")
+                //跳转到登录页面
+                this.$router.replace('/Login')
+              }
+            });
+            alert('注册失败！');
           } else {
             console.log('error submit!!');
             return false;
           }
         });
       },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      },
-
-      fetchCode(){
-        //获取邮箱发送验证码，判断验证码是否正确，正确则将表单信息提交给后台注册
-        
-        //设置获取验证码按钮禁用60s
-        var btn = document.getElementById("btn")
-        this.btnTime(btn);
-
-      },
-      btnTime(btn){
-        var num = 5
-        this.btnStatus = true;
+      getAuthCode : function(){
+        //获取验证码前先判断邮箱是否已填，若为空则提示用户未填写邮箱，并返回
+        var userEmail = this.ruleForm.email
+        if (userEmail === '') {
+          alert("邮箱未填写！")
+          return;
+        }
+        //生成六位随机数验证码
+        this.auto_yzm = Math.random().toFixed(6).slice(-6)
+        // 将生成的验证码和填入的邮箱发送给后台
+        sendCode(userEmail, this.auto_yzm)
+        //js获取验证码按钮元素，并切换显示禁用30s倒计时按钮
+        this.sendAuthCode = false;
+        //缓存当前的对象
+        let _this = this   
+        //使用定时器，倒计时禁用按钮
         var timer = setInterval(function () {
-          num--
-          btn.innerHTML = num + "s后重新获取"
-
-          if (num === 0) {
-            btn.innerHTML = '获取验证码';
-            this.btnStatus = false;
-            this.compoKey += 1;
+          _this.auth_time-- ;
+          console.log(_this.auth_time)
+          if (_this.auth_time === 0) {
+            _this.sendAuthCode = true;
+            _this.auth_time = 5;
             clearInterval(timer)
           }
         }, 1000)
+      },
+      toLogin(){
+
       }
     }
   }

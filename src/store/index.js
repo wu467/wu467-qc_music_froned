@@ -8,7 +8,8 @@ export default new Vuex.Store({
       picUrl: 'https://avatars.githubusercontent.com/u/58961430?v=4',   //初始专辑图片
       songName: '',   //歌曲名称
       musicUrl: 'http://isure.stream.qqmusic.qq.com/C400001jtUoX1b2FgO.m4a?guid=2796982635&vkey=E9399115303F4BADB317C934F626E167C3EB395F06C86FB88305FFF058E2856C2089AE116E5ECFB77E5A41E8943124D86BFF7D577631CBFF&uin=&fromtag=99',  //播放链接地址
-      songMid: ''
+      songMid: '',
+      
     },
     mutations: {  //修改state
       changeDataAlbumMid(state,params){  
