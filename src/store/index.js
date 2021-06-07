@@ -9,7 +9,7 @@ export default new Vuex.Store({
       songName: '',   //歌曲名称
       musicUrl: 'http://isure.stream.qqmusic.qq.com/C400001jtUoX1b2FgO.m4a?guid=2796982635&vkey=E9399115303F4BADB317C934F626E167C3EB395F06C86FB88305FFF058E2856C2089AE116E5ECFB77E5A41E8943124D86BFF7D577631CBFF&uin=&fromtag=99',  //播放链接地址
       songMid: '',
-      
+      songCount: 0,  // 用户收藏歌曲总数  
     },
     mutations: {  //修改state
       changeDataAlbumMid(state,params){  
@@ -23,7 +23,16 @@ export default new Vuex.Store({
       },
       changeDataMid(state, songMid){
         state.songMid = songMid
-      }      
+      },
+      changeDataCount(state, count){
+        state.songCount = count
+      },
+      incrementSongCount(state){
+        state.songCount++
+      },
+      decrementSongCount(state){
+        state.songCount--
+      }
     },
     getters:{   //类似于computed，返回从store中获取一些state处理后的数据
 

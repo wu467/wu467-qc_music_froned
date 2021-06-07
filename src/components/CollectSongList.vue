@@ -10,8 +10,8 @@
 
       <el-table-column>
         <template slot-scope="scope">
-        <el-button icon="el-icon-headset" size="small" type="success" @click="playSong(scope.$index)">播放</el-button>
-          <el-button icon="el-icon-star-off" size="small " type="danger" @click="favoriteSong(scope.$index, scope.row)">收藏</el-button>
+        <el-button  size="small" type="success" @click="playSong(scope.$index)">🎧 播放</el-button>
+          <el-button size="small " type="info" @click="favoriteSong(scope.$index)">❤️‍</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -32,7 +32,9 @@
 import {getPlayMusic} from '@/api/music_api/playMusic'
 import {getAllFavorite} from '@/api/backStage_api/allFavorite'  //用户所有收藏歌曲的songmid（一个字符串）
 import {getSongBatch} from '@/api/music_api/songBatch.js' //从qq音乐中获取收藏歌曲的信息
- 
+import {getFavoriteSong} from '@/api/backStage_api/favoriteSong' //向后端请求收藏api
+import {getCookie} from '@/utils/auth'  //获取用户cookie
+
   export default ({
     data() {
       return {
@@ -51,39 +53,6 @@ import {getSongBatch} from '@/api/music_api/songBatch.js' //从qq音乐中获取
       this.fetchCollection(this.userId);  //获取用户收藏歌曲
     },
     methods: {
-       fetchCollection : function(userId){    // 根据用户名称获取收藏歌曲
-          //获取用户所有收藏歌曲
-          getAllFavorite(userId).then((res) => {
-            getSongBatch(res.data).then((response) => {
-              console.log("用户收藏歌曲的基本信息")
-              var songMessage = response.data.data         //  获取到了收藏歌曲的基本信息
-              this.currentSong = songMessage
-
-                            console.log("标记")
-                            console.log(songMessage)
-
-              // 根据songMessage对象的键的个数创建一个数组
-              var songList = new Array()
-
-              // 替换songMessage对象键名，并将键值对存入到songList数组中
-              var i =0;
-              for (let key in songMessage) {
-                  songMessage["song"] = songMessage[key]
-                  songList.push(songMessage["song"])
-                  delete songMessage[key]
-              }
-
-              //判断songList数组是否有值，无则提示用户无收藏歌曲，有则将该数组传递给子组件
-              if(songList.length == 0){
-                // 提示无收藏歌曲
-              } else {
-                 this.tableData = songList
-                            console.log("标记3333")
-                            console.log(songList)                 
-              }
-            })
-          })
-    }, 
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.currentPage = val;
@@ -97,12 +66,70 @@ import {getSongBatch} from '@/api/music_api/songBatch.js' //从qq音乐中获取
         this.$store.commit('changeDataAlbumMid',currentSong.album.mid)
         this.$store.commit('changeDataName',this.currentSong.name)
       },
-      async fetchPlay(songmid){
+      fetchPlay(songmid){
         getPlayMusic(songmid).then(response=>{
           const url = response.data.data[songmid]
           this.$store.commit('changeDataUrl',url)          
         })
-      } 
+      },
+      fetchCollection : function(userId){    // 根据用户名称获取收藏歌曲
+        //获取用户所有收藏歌曲
+        getAllFavorite(userId).then((res) => {
+          getSongBatch(res.data).then((response) => {
+            console.log("用户收藏歌曲的基本信息")
+            var songMessage = response.data.data         //  获取到了收藏歌曲的基本信息
+            this.currentSong = songMessage
+
+            // 根据songMessage对象的键的个数创建一个数组
+            var songList = new Array()
+
+            // 替换songMessage对象键名，并将键值对存入到songList数组中
+            var i =0;
+            for (let key in songMessage) {
+                songMessage["song"] = songMessage[key]
+                songList.push(songMessage["song"])
+                delete songMessage[key]
+            }
+            //判断songList数组是否有值，无则提示用户无收藏歌曲，有则将该数组传递给子组件
+            if(songList.length == 0){
+              // 提示无收藏歌曲
+            } else {
+               this.tableData = songList
+                console.log("标记3333")  
+                this.$store.commit('changeDataCount', songList.length)           
+            }
+          })
+        })
+      }, 
+      favoriteSong : function(index){
+        const uid = getCookie("userId")  //从cookie中获取uesId
+        var userId = parseInt(uid);   //将字符串类型的userId转换为数值型，与后台接受的类型保持一致。
+        //获取当前点击歌曲songMid
+        const songmid = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)[index].track_info.mid
+
+        //当用户进行收藏或取消收藏歌曲时改变songCount的值，收藏则加一，取消收藏则减一
+        // 调用收藏歌曲api，将userId和songmid传递给后台
+        getFavoriteSong(userId, songmid).then( res => {
+          if(res.msg === '收藏成功！'){  //收藏
+            this.$notify({
+              title: res.msg,
+              type: 'success',
+              showClose: false,
+            });
+            //用户收藏时vuex中songCount加一
+            this.$store.commit('incrementSongCount')               
+          } 
+          else if(res.msg === '取消收藏成功！') {  //取消收藏
+              this.$notify({
+                title: res.msg,
+                type: 'success',
+                showClose: false,
+              });
+              //vuex中的songCount减一
+              this.$store.commit('decrementSongCount')
+          }
+        });
+      },
     }
   })
 </script>

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import {getNotices} from '@/api/notices'
+import {getNotices} from '@/api/backStage_api/notices'
 import LeftSidebar from '@/views/sidebar/LeftSidebar'
 import MainList from '@/views/list/MainList'
 

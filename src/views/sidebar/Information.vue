@@ -9,7 +9,7 @@
                     <el-avatar shape="square" :size="80" :src="url"></el-avatar>
                     <div class="username">
                         <span>{{this.userCookie}}</span>
-                        <p><span>收藏歌曲：3首</span></p>
+                        <p><span>收藏歌曲：{{this.$store.state.songCount}}首</span></p>
                         <p>
                             <router-link :to="'/user/resPassword'" target='_blank' style="text-decoration: none">
                                  <a style="text-decoration: none">修改密码</a>
@@ -21,7 +21,7 @@
                 </div>
 
                 <!-- 不存在，显示登陆与注册按钮 -->
-                <div v-if="this.infoVisible">
+                <div v-if="this.infoVisible" class="btn">
                     <!-- 跳转到登录页面 -->
                     <router-link :to="'/Login'" target='_blank' style="text-decoration: none">
                         <b-button  size="is-medium" type="is-success" outlined>💡 登陆</b-button>
@@ -78,6 +78,10 @@ export default ({
     .username{
         margin-top: -80px;
         margin-left: 100px;
+    }
+    .btn {
+        margin-left: 15px;
+        margin-top: 8px;
     }
 
 </style>

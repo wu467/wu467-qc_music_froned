@@ -13,8 +13,8 @@
           <el-button v-if="showButtonToSearch" @click="backTrack2()" type="success" round>返回soso</el-button>
         </template>
         <template slot-scope="scope">
-          <el-button icon="el-icon-headset" size="small" type="success" @click="playSong(scope.$index)">播放</el-button>
-          <el-button icon="el-icon-star-off" size="small" type="info" @click="favoriteSong(scope.$index)">收藏</el-button>
+          <el-button size="small" type="success" @click="playSong(scope.$index)">🎧 播放</el-button>
+          <el-button size="small" type="info" @click="favoriteSong(scope.$index)">🤍 收藏</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -65,7 +65,7 @@ import {getFavoriteSong} from '@/api/backStage_api/favoriteSong' //向后端请�
             else if(this.parentData.mark === 'search') {
               this.showButtonToSearch = true; 
               this.tableData = response.data.data.song.list                           
-            } 
+            }
             else if (this.parentData.mark === 'new'){
               const data = response.data.data.list
               // js修改key名 替换数组中歌曲的键名，和歌曲的唯一id，便于管理。
@@ -122,20 +122,29 @@ import {getFavoriteSong} from '@/api/backStage_api/favoriteSong' //向后端请�
           var userId = parseInt(uid);   //将字符串类型的userId转换为数值型，与后台接受的类型保持一致。
           //获取当前点击歌曲的songmid
           const songmid = this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)[index].songmid  
+          //当用户进行收藏或取消收藏歌曲时改变songCount的值，收藏则加一，取消收藏则减一
           // 调用收藏歌曲api，将userId和songmid传递给后台
           getFavoriteSong(userId, songmid).then( res => {
-            if(res.code == 200){  //收藏
+
+            // 测试，用户是收藏还是取消收藏
+            console.log(res.msg)
+
+            if(res.msg === '收藏成功！'){  //收藏
               this.$notify({
                 title: res.msg,
                 type: 'success',
                 showClose: false,
-              });               
-            } else if(res.code == 201) {  //取消收藏
+              });
+              //用户收藏时vuex中songCount加一
+              this.$store.commit('incrementSongCount')               
+            } else if(res.msg === '取消收藏成功！') {  //取消收藏
                 this.$notify({
                   title: res.msg,
                   type: 'success',
                   showClose: false,
                 });
+                //vuex中的songCount减一
+                this.$store.commit('decrementSongCount')
               }
           });
         }

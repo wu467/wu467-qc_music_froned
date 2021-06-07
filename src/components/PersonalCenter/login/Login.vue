@@ -1,14 +1,7 @@
 <template>
-    <div class="container">
-        <div class="aside">
-            <el-carousel  height="700px" indicator-position="outside">
-                <el-carousel-item v-for="item in pics" :key="item.url">
-                    <img :src="item.url"/>
-                </el-carousel-item>
-            </el-carousel>
-        </div>
+    <div class="container is-fluid">
         <div class="right_container">
-            <img src="@/assets/qcyy.png" class="qcyy"/>
+            <h1>用户登录</h1>
             <div class="right_main">
                 <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                     <el-form-item label="用户名" prop="userName">
@@ -18,7 +11,7 @@
                         <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                        <el-button class="btn" type="primary" @click="submitForm('ruleForm')">登录</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -48,12 +41,6 @@ export default {
             }
         };
         return {
-            pics: [
-                { url: require("@/assets/loginImg/p1.png") },
-                { url: require("@/assets/loginImg/1.jpg") },
-                { url: require("@/assets/loginImg/1.jpg") },
-                { url: require("@/assets/loginImg/1.jpg") }
-            ],
             ruleForm: {
                 userName: '',
                 password: ''
@@ -89,35 +76,27 @@ export default {
 
 </script>
 
-<style scoped>
-    /* 页面布局 */
-    .container{
-        max-width: 1500px;
-        height: 720px;
+<style >
+    html {
+        width: 100%;
+        height: 100%;
+        background-image: url("../../../assets/lm.jpg");
+        background-size: cover;    
+    }
+    .right_container {
+        width: 550px;
         float: left;
-        padding-left: 50px;
+        margin-top: 10%;
+        margin-left: 5%;
     }
-    .aside{
-        width: 700px;
-        height: 720px;
-        float: left;
+    h1 {
+      font-family:华文行楷;
+      font-size: 60px;
+      padding-left: 210px;
+      padding-bottom: 25px;
     }
-    .right_container{
-        float: left;
-        width: 500px;
-        height: 720px;
-    }
-    .right_main{
-        text-align: center;
-        width: 450px;
-        height: 250px;
-        margin-left: 180px;
-        margin-top: 10px;
-        padding-top: 40px;
-        padding-right: 80px;
-    }
-    .qcyy {
-        margin-left: 160px;
-        margin-top: 100px;
+    .btn {
+       margin-left: 145px;
+       width: 150px;
     }
 </style>
